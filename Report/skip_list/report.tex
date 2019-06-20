@@ -1,0 +1,175 @@
+\documentclass[12pt,a4paper,titlepage]{article}
+
+\usepackage[top=1in, bottom=1in, left=1.2in, right=1.2in]{geometry}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[AutoFakeBold=true,AutoFakeSlant=true]{xeCJK}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{indentfirst}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage[hyperref]{ntheorem}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage[toc,page]{appendix}
+\usepackage{multirow}
+\usepackage{cite}
+\usepackage{changepage}
+\usepackage{pgf}
+\usepackage{tikz}
+
+\usetikzlibrary{positioning, automata}
+
+%\setmainfont{DejaVu Sans}
+\setCJKsansfont{等线}
+\setCJKmainfont{SimSun}
+%\setCJKmathfont{Times New Roman}
+\setmainfont{Times New Roman}
+\setmonofont{Consolas}
+\newfloat{figtab}{htb}{fgtb}
+\makeatletter
+    \newcommand\figcaption{\def\@captype{figure}\caption}
+    \newcommand\tabcaption{\def\@captype{table}\caption}
+\makeatother
+
+\bibliographystyle{ieeetr}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\setlength{\parindent}{0em}
+
+% \lstset{
+% 	language=C++,
+% 	numbers=left,
+% 	breaklines=true,
+% 	basicstyle=\scriptsize,
+% 	commentstyle=\color{mygreen},
+% 	keywordstyle=\color{blue},
+% 	numberstyle=\color{mygray},
+% 	rulecolor=\color{black},
+% 	stringstyle=\color{mymauve}
+% }
+\lstset{
+	extendedchars = false,
+	language = C++,
+	basicstyle = \fontspec{Consolas},
+	numbers=left,
+	numberstyle=\tiny,
+	stepnumber=1,
+	numbersep=5pt,
+	keywordstyle={
+		\color[rgb]{0,0,1}
+		\fontspec{Consolas Bold}},
+	commentstyle={
+		\color[rgb]{0.133,0.545,0.133}
+		\fontspec{Consolas Italic}},
+	stringstyle=\color[rgb]{0.627,0.126,0.941},
+	backgroundcolor=\color[rgb]{0.95,0.95,0.95},
+	showspaces= false,
+	showstringspaces=false,
+	showtabs=false,
+	breaklines=true,
+	%frame=single,
+}
+
+\pagestyle{fancy}
+\lhead{\leftmark}
+\rhead{Skip Lists}
+\renewcommand{\headrulewidth}{0.5pt}
+
+
+% \theoremstyle{break}
+% \theoremsymbol{\ensuremath{\clubsuit}}
+% \theoremseparator{.}
+% \theoremprework{\bigskip\hrule}
+% \theorempostwork{\hrule\bigskip}
+% \theoremindent1em
+% \newtheorem*{definition}{定义}[section]
+
+%\newtheorem{definition}{\hspace{2em}\textbf{定义}}[section]
+% \theroemclass{Theorem}
+% \theoremstyle{break}
+% \newtheorem*{theorem}{定理}[section]
+
+% \theoremstyle{break}
+% \theoremstyle{plain}
+% \newtheorem{properties}{性质}[section]
+
+% \theroemclass{Proof}
+% \theoremstyle{break}
+% \theoremseparator{:}
+% \newtheorem*{proof}{证明}
+
+\title{
+	\includegraphics[scale=1.5]{zju_1.pdf}\\~\\
+	\includegraphics[scale=1]{zju_2.pdf}\\
+	~\\
+	\Huge{Skip Lists}\\[2ex]
+	\sffamily\large{Advanced Data Structures and Algorithm Analysis\\Research Project 7}
+}
+\author{
+	\sffamily
+	朱璟森\\
+	3170104166
+\and
+	\sffamily
+	童鑫远\\
+	3170103148
+\and
+	\sffamily
+	陶泓羽\\
+	3170102625
+}
+
+% \newcommand{\enabstractname}{Abstract}
+% \newenvironment{enabstract}{%
+%     \par
+%     \noindent\mbox{}\hfill{\bfseries \enabstractname}\hfill\mbox{}\par\vskip 1ex\begin{adjustwidth}{2em}{2em}
+% 	}{\par\vskip 2.5ex\end{adjustwidth}}  
+
+\setlength{\parskip}{0.1em}
+\linespread{1.1}
+\setenumerate[1]{itemsep=0pt,partopsep=0pt,parsep=5pt,topsep=5pt}
+\setitemize[1]{itemsep=0pt,partopsep=0pt,parsep=5pt,topsep=5pt}
+\setdescription{itemsep=0pt,partopsep=0pt,parsep=5pt,topsep=5pt}
+	
+\begin{document}
+	\maketitle
+%	\newpage
+	\tableofcontents
+	\newpage
+
+	\input{introduction}
+	\input{algorithm_specification}
+	\input{testing_results}
+	\input{analysis_and_comments}
+
+	\newpage
+
+	\begin{appendices}
+		\section*{Source Code}
+		Due to limited space, the complete source code isn't included in this report. You can find the source code in \texttt{skip\_list.cpp}, thanks.
+		\section*{Author List}
+		\begin{itemize}
+			\item Programmer: Tao Hongyu
+			\item Tester: Tao Hongyu, Zhu Jingsen
+			\item Report Writer: Zhu Jingsen
+			\item PPT and Presentation: Tong Xinyuan
+		\end{itemize}
+		\section*{Declaration}
+		\textit{We hereby declare that all the work done in this project titled "Skip Lists" is of our independent effort as a group.}
+	\end{appendices}
+
+%	\bibliography{oram}
+
+\end{document}

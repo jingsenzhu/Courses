@@ -1,0 +1,374 @@
+\section{Algorithm Specification}
+\subsection{Description of Skip List}
+The structure of an ordinary ordered Linked List is as follows ($H$ and $T$ refers to the head node and tail node of the list, which contains no valid value):
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[shorten >=1pt,node distance=1.5cm,on grid]
+        \node[state] (H)  at (0,0) {$H$};
+        \node[state] (n1) at (1.5,0) {$1$};
+        \node[state] (n2) at (3,0) {$2$};
+        \node[state] (n3) at (4.5,0) {$3$};
+        \node[state] (n4) at (6,0) {$4$};
+        \node[state] (n5) at (7.5,0) {$5$};
+        \node[state] (n6) at (9,0) {$6$};
+        \node[state] (n7) at (10.5,0) {$7$};
+        \node[state] (n8) at (12,0) {$8$};
+        \node[state] (T)  at (13.5,0) {$T$};
+
+        \path[->] (H)  edge [] node []{} (n1)
+                  (n1) edge [] node []{} (n2)
+                  (n2) edge [] node []{} (n3)
+                  (n3) edge [] node []{} (n4)
+                  (n4) edge [] node []{} (n5)
+                  (n5) edge [] node []{} (n6)
+                  (n6) edge [] node []{} (n7)
+                  (n7) edge [] node []{} (n8)
+                  (n8) edge [] node []{} (T);
+    \end{tikzpicture}
+    \caption{Ordered Linked List}\label{fig:lkl}
+\end{figure}
+If we want to find $7$ in the list, we'll have to sequentially search $1\to 2\to \ldots\to 7$, which is $O(N)$. But in an ordered array, we can use binary search to reduce the complexity to $O(\log{N})$. But a linked list doesn't support randomized access, thus we can't use binary search method.\par
+A skip list is bulit in levels. If we store some internal nodes in a higher level, we can support a searching method similar to binary search.\\
+Now we search 7 again, starting from head node $H$:
+\begin{enumerate}
+    \item Compare 4 and 7, 7 > 4; compare 8 and 7, 7 < 8, go down at 4
+    \item Compare 6 and 7, 7 > 6; compare 8 and 7, 7 < 8, go down at 6
+    \item Compare 7 and 7, 7 = 7, found!
+\end{enumerate}
+The process of finding 7 is as figure \ref{fig:skl}:
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[shorten >=1pt,node distance=1.5cm,on grid,
+        place/.style={circle,draw=blue!50,fill=blue!20,text=white,minimum size=10mm},
+        every state/.style={fill=none,draw=black,text=black,minimum size=10mm}]
+        
+        \node[place] (H1)  at (0,3) {$H$};
+        \node[place] (n11) at (6,3) {$4$};
+        \node[state] (n12) at (12,3) {$8$};
+        \node[state] (T1) at (13.5,3) {$T$};
+
+        \node[state] (H2)  at (0,1.5) {$H$};
+        \node[state] (n21) at (3,1.5) {$2$};
+        \node[place] (n22) at (6,1.5) {$4$};
+        \node[place] (n23) at (9,1.5) {$6$};
+        \node[state] (n24) at (12,1.5) {$8$};
+        \node[state] (T2) at (13.5,1.5) {$T$};
+
+        \node[state] (H3)  at (0,0) {$H$};
+        \node[state] (n31) at (1.5,0) {$1$};
+        \node[state] (n32) at (3,0) {$2$};
+        \node[state] (n33) at (4.5,0) {$3$};
+        \node[state] (n34) at (6,0) {$4$};
+        \node[state] (n35) at (7.5,0) {$5$};
+        \node[place] (n36) at (9,0) {$6$};
+        \node[place] (n37) at (10.5,0) {$7$};
+        \node[state] (n38) at (12,0) {$8$};
+        \node[state] (T3)  at (13.5,0) {$T$};
+
+        \path[->] 
+                  (H1)  edge [blue!50] node []{} (n11)
+                  (n11) edge [] node []{} (n12)
+                  (n12) edge [] node []{} (T1)
+
+                  (H2)  edge [] node []{} (n21)
+                  (n21) edge [] node []{} (n22)
+                  (n22) edge [blue!50] node []{} (n23)
+                  (n23) edge [] node []{} (n24)
+                  (n24) edge [] node []{} (T2)
+        
+                  (H3)  edge [] node []{} (n31)
+                  (n31) edge [] node []{} (n32)
+                  (n32) edge [] node []{} (n33)
+                  (n33) edge [] node []{} (n34)
+                  (n34) edge [] node []{} (n35)
+                  (n35) edge [] node []{} (n36)
+                  (n36) edge [blue!50] node []{} (n37)
+                  (n37) edge [] node []{} (n38)
+                  (n38) edge [] node []{} (T3)
+                  
+                  (H1)  edge [] node []{} (H2)
+                  (H2)  edge [] node []{} (H3)
+                  
+                  (n21)  edge [] node []{} (n32)
+                  
+                  (n11)  edge [blue!50] node []{} (n22)
+                  (n22)  edge [] node []{} (n34)
+                  
+                  (n23)  edge [blue!50] node []{} (n36)
+
+                  (n12)  edge [] node []{} (n24)
+                  (n24)  edge [] node []{} (n38)
+                  
+                  (T1)  edge [] node []{} (T2)
+                  (T2)  edge [] node []{} (T3);
+    \end{tikzpicture}
+    \caption{Structure of Skip List and the search path of finding 7}\label{fig:skl}
+\end{figure}
+In other words, skip list stores some indices of the binary search, which combines the structure of linked list and the method of binary search.
+
+\subsection{Data Structure of skip list}
+Firstly, we define the structure of nodes in the skip list:
+\begin{lstlisting}[language={C++}]
+struct SkipListNode {
+    int value;
+    int level;
+    SkipListNode **next_nodes;
+};
+\end{lstlisting}
+\texttt{value} refers to the value in the node, and \texttt{level} refers to the level. The difference between our implementation of skip list and ordinary linked list is that we store the successor nodes in an array, so that the same node in different levels shares the same storage space. \texttt{next\_nodes[i]} is the successor node in level \texttt{i}. For example, for the node $4$ in figure \ref{fig:skl}, \texttt{next\_nodes[0]} is $5$, \texttt{next\_nodes[1]} is $6$, and \texttt{next\_nodes[2]} is $8$. In this way, we can decrease the space complexity and reduce the structure in figure \ref{fig:skl} to as follows:
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[shorten >=1pt,node distance=1.5cm,on grid]
+        \node[state] (H)  at (0,0) {$H$};
+        \node[state] (n1) at (1.5,0) {$1$};
+        \node[state] (n2) at (3,0) {$2$};
+        \node[state] (n3) at (4.5,0) {$3$};
+        \node[state] (n4) at (6,0) {$4$};
+        \node[state] (n5) at (7.5,0) {$5$};
+        \node[state] (n6) at (9,0) {$6$};
+        \node[state] (n7) at (10.5,0) {$7$};
+        \node[state] (n8) at (12,0) {$8$};
+        \node[state] (T)  at (13.5,0) {$T$};
+
+        \path[->] (H)  edge [] node []{} (n1)
+                  (H)  edge [bend left] node []{} (n2)
+                  (H)  edge [bend left = 45] node []{} (n4)
+                  (n1) edge [] node []{} (n2)
+                  (n2) edge [] node []{} (n3)
+                  (n2) edge [bend left] node []{} (n4)
+                  (n3) edge [] node []{} (n4)
+                  (n4) edge [] node []{} (n5)
+                  (n4) edge [bend left] node []{} (n6)
+                  (n4) edge [bend left = 45] node []{} (n8)
+                  (n5) edge [] node []{} (n6)
+                  (n6) edge [] node []{} (n7)
+                  (n6) edge [bend left] node []{} (n8)
+                  (n7) edge [] node []{} (n8)
+                  (n8) edge [] node []{} (T)
+                  (n8) edge [bend left] node []{} (T)
+                  (n8) edge [bend left = 60] node []{} (T);
+    \end{tikzpicture}
+    \caption{Skip List with shared nodes}\label{fig:skl2}
+\end{figure}
+Then, we define the structure of the skip list:
+\begin{lstlisting}[language=C++]
+class SkipList {
+    public:
+        SkipList(int max_level); //Constructor
+        void Insert(int value);
+        void Delete(int value);
+        SkipListNode *Find(int value);
+        void show(); //to print the list
+    private:
+        int Max_Level;
+        SkipListNode *head;
+        SkipListNode *tail;
+        static int random_level(int max); //Determine the level of a node randomly
+};
+\end{lstlisting}
+
+\subsection{Operations on skip list}
+
+\subsubsection{Search}
+A brief description of search is shown by a specific case in the last section. Now let's introduce it formally.\par
+\begin{enumerate}
+    \item Start at the $node = H$ and $level = max\_level - 1$
+    \item Move ahead to next node until tail or $value \leq node.value$
+    \item If $value = node.value$ return $node$, else $level = level - 1$ and repeat step 2
+    \item If $level = 0$ and still not found, return $null$
+\end{enumerate}
+In pseudo-code:
+\begin{algorithm}[H]
+    \caption{Skip List: Find}
+    \begin{algorithmic}[1]
+		\Procedure {find}{$value$}
+            \State $node \gets H$
+            \For{$level \gets max\_level - 1 \ \mathbf{to}\ 0$}
+                \While{$node.next\_nodes[level] \neq T\ \ {\rm and}\ \ node.value < value$}
+                    \State $node \gets node.next\_nodes[level]$
+                \EndWhile
+                \If{$node.value = value$}
+                    \State \Return $node$
+                \EndIf
+            \EndFor
+            \State \Return $null$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Insertion}
+There are 3 steps when we insert a new value into a skip list: finding the predecessors, creating a new node and finally insert into the list:
+\begin{enumerate}
+    \item Finding the predecessors:\\
+          Firstly, we need to locate the position of the newly-inserted node in the list by finding its predecessors. This step is similar to the find operation, just to find the last node whose value is less than the new value in each level.
+    \item Creating a new node:\\
+          In this step, we construct a new node and choose a number $k$ with a randomized strategy (which will be mentioned below) as the number of levels of the node.
+    \item Inserting into the list:\\
+          For level $0$ to $k$, insert the new node after its predecessor just like ordinary linked list.
+\end{enumerate}
+In pseudo-code:
+\begin{algorithm}[H]
+    \caption{Skip List: Insert}
+    \begin{algorithmic}[1]
+        \Procedure {insert}{$value$}
+            \State{//Step 1: Finding the predecessors}
+            \State $predecessors \gets \mathbf{new}\ Node[Max\_level]$
+            \State $node \gets H$
+            \For{$level \gets max\_level - 1 \ \mathbf{to}\ 0$}
+                \While{$node.next\_nodes[level] \neq T\ \ {\rm and}\ \ node.value < value$}
+                    \State $node \gets node.next\_nodes[level]$
+                \EndWhile
+                \State $predecessors[level] \gets node$
+            \EndFor
+            \State{//Step 2: Creating a new node}
+            \State$k \gets$ \Call{random\_level}{$Max\_level$}
+            \State $new\_node \gets \mathbf{new}\ Node(value, k)$
+            \State{//Step 3: Inserting into the list}
+            \For{$level \gets 0 \ \mathbf{to}\ k$}
+                \State Insert $new\_node$ after $predecessors[level]$
+            \EndFor
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+For example, if we want to insert $9$ into the list in figure \ref{fig:skl2}, and suppose we get $k=2$, then the process is as follows (blue nodes and arrows denotes the search path to locate the predecessor, yellow node is the predecessor, red node denotes the new node. Dashed arrows and red thick arrows denote the old and updated ``next'' relations):
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[shorten >=1pt,node distance=1.5cm,on grid,
+        place/.style={circle,draw=blue!50,fill=blue!20,text=white,minimum size=10mm},
+        predecessor/.style={circle,draw=yellow,fill=yellow!20,text=black,minimum size=10mm},
+        insert/.style={circle,draw=red!50,fill=red!20,text=white,minimum size=10mm},
+        every state/.style={fill=none,draw=black,text=black,minimum size=10mm}]
+        \node[place] (H)  at (0,0) {$H$};
+        \node[state] (n1) at (1.5,0) {$1$};
+        \node[state] (n2) at (3,0) {$2$};
+        \node[state] (n3) at (4.5,0) {$3$};
+        \node[place] (n4) at (6,0) {$4$};
+        \node[state] (n5) at (7.5,0) {$5$};
+        \node[state] (n6) at (9,0) {$6$};
+        \node[state] (n7) at (10.5,0) {$7$};
+        \node[predecessor] (n8) at (12,0) {$8$};
+        \node[insert] (n9)  at (13.5,-1.5) {$9$};
+        \node[state] (T)  at (15,0) {$T$};
+
+        \path[->] (H)  edge [] node []{} (n1)
+                  (H)  edge [bend left] node []{} (n2)
+                  (H)  edge [bend left = 45, draw = blue!50] node []{} (n4)
+                  (n1) edge [] node []{} (n2)
+                  (n2) edge [] node []{} (n3)
+                  (n2) edge [bend left] node []{} (n4)
+                  (n3) edge [] node []{} (n4)
+                  (n4) edge [] node []{} (n5)
+                  (n4) edge [bend left] node []{} (n6)
+                  (n4) edge [bend left = 45, draw = blue!50] node []{} (n8)
+                  (n5) edge [] node []{} (n6)
+                  (n6) edge [] node []{} (n7)
+                  (n6) edge [bend left] node []{} (n8)
+                  (n7) edge [] node []{} (n8)
+                  (n8) edge [thick, draw = red!50] node []{} (n9)
+                  (n8) edge [bend right, thick, draw = red!50] node []{} (n9)
+                  (n8) edge [dashed] node []{} (T)
+                  (n8) edge [bend left, dashed] node []{} (T)
+                  (n8) edge [bend left = 45] node []{} (T)
+                  (n9) edge [thick, draw = red!50] node []{} (T)
+                  (n9) edge [bend right, thick, draw = red!50] node []{} (T);
+    \end{tikzpicture}
+    \caption{Process of inserting $9$}\label{fig:sklins}
+\end{figure}
+\newpage
+\subsubsection{Deletion}
+The process of deletion is similar to insertion in 2 steps: finding the predecessor and delete the node.
+\begin{algorithm}[H]
+    \caption{Skip List: Delete}
+    \begin{algorithmic}[1]
+        \Procedure {delete}{$value$}
+            \State{//Step 1: Finding the predecessors}
+            \State $predecessors \gets \mathbf{new}\ Node[Max\_level]$
+            \State $node \gets H$
+            \For{$level \gets max\_level - 1 \ \mathbf{to}\ 0$}
+                \While{$node.next\_nodes[level] \neq T\ \ {\rm and}\ \ node.value < value$}
+                    \State $node \gets node.next\_nodes[level]$
+                \EndWhile
+                \If{$node.next\_nodes[level] \neq tail\ \ {\rm and}\ \ node.next\_nodes[level].value = value$}
+                    \State $predecessors[level] \gets node$
+                \Else
+                    \State $predecessors[level] \gets null$
+                \EndIf
+            \EndFor
+            \State{//Step 2: Deleting the node}
+            \For{$level \gets 0 \ \mathbf{to}\ k$}
+                \State Delete $new\_node$ after $predecessors[level]$
+            \EndFor
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+For example, if we want to insert $6$ in the list in figure \ref{fig:skl2}, then the process is as follows (blue nodes and arrows denotes the search path to locate the predecessor, yellow node is the predecessor, red node denotes the new node. Dashed arrows and red thick arrows denote the old and updated ``next'' relations):
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[shorten >=1pt,node distance=1.5cm,on grid,
+        place/.style={circle,draw=blue!50,fill=blue!20,text=white,minimum size=10mm},
+        predecessor/.style={circle,draw=yellow,fill=yellow!20,text=black,minimum size=10mm},
+        delete/.style={circle,draw=red!50,fill=red!20,text=white,minimum size=10mm},
+        every state/.style={fill=none,draw=black,text=black,minimum size=10mm}]
+        \node[place] (H)  at (0,0) {$H$};
+        \node[state] (n1) at (1.5,0) {$1$};
+        \node[state] (n2) at (3,0) {$2$};
+        \node[state] (n3) at (4.5,0) {$3$};
+        \node[predecessor] (n4) at (6,0) {$4$};
+        \node[predecessor] (n5) at (7.5,0) {$5$};
+        \node[delete] (n6) at (9,-1.5) {$6$};
+        \node[state] (n7) at (10.5,0) {$7$};
+        \node[state] (n8) at (12,0) {$8$};
+        \node[state] (T)  at (13.5,0) {$T$};
+
+        \path[->] (H)  edge [] node []{} (n1)
+                  (H)  edge [bend left] node []{} (n2)
+                  (H)  edge [bend left = 45, draw = blue!50] node []{} (n4)
+                  (n1) edge [] node []{} (n2)
+                  (n2) edge [] node []{} (n3)
+                  (n2) edge [bend left] node []{} (n4)
+                  (n3) edge [] node []{} (n4)
+                  (n4) edge [draw = blue!50] node []{} (n5)
+                  (n4) edge [dashed] node []{} (n6)
+                  (n4) edge [bend left, draw = red!50, thick] node []{} (n8)
+                  (n4) edge [bend left = 45] node []{} (n8)
+                  (n5) edge [dashed] node []{} (n6)
+                  (n5) edge [draw = red!50, thick] node []{} (n7)
+                  (n6) edge [dashed] node []{} (n7)
+                  (n6) edge [dashed] node []{} (n8)
+                  (n7) edge [] node []{} (n8)
+                  (n8) edge [] node []{} (T)
+                  (n8) edge [bend left] node []{} (T)
+                  (n8) edge [bend left = 60] node []{} (T);
+    \end{tikzpicture}
+    \caption{Process of deleting $6$}\label{fig:skldel}
+\end{figure}
+
+\subsubsection{Randomization}
+Finally, we introduce the random strategy to determine the level $k$ of a new node in the process of insertion.\par
+$k$ is a random number between $0$ and $Max\_level$. However, in order to make the expected result to similate binary-search, we don't generate uniform random (i.e. \texttt{k=rand()\%Max\_level}), but make $k$ follows \textbf{Geometric Distribution} with $p = \frac 1 2$. The algorithm is like flipping a coin --- If the coin faces up, the level increases by 1, or else stop at current level:
+\begin{algorithm}[H]
+    \caption{Random Level}\label{alg:rand}
+    \begin{algorithmic}[1]
+        \Procedure {random\_level}{}
+            \State $level \gets 0$
+            \While{$level < Max\_level - 1$}
+                \If{$Random\{0,1\}$}
+                    \State $level \gets level + 1$
+                \Else
+                    \State \textbf{break}
+                \EndIf
+            \EndWhile
+            \State\Return{$level$}
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+Suppose the maximum level is $M$, then
+\[
+    P(k=n)=\left\{
+        \begin{aligned}
+            &(\frac 1 2)^{n+1},\ n < M-1\\
+            &(\frac 1 2)^{n}=(\frac 1 2)^{M-1},\ n = M-1
+        \end{aligned}
+        \right.
+\]
+If the size of the skip list is $N$, then the expected number of nodes in the $k_{th}$ level is $E(N_k) = \frac{N}{2^k}$, each level decreases by $\frac 1 2$, just like the process of binary search.

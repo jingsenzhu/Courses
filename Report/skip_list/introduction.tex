@@ -1,0 +1,6 @@
+\section{Introduction}
+\subsection{Background of Skip List}
+Linked List is a common linear data structure, with an $O(N)$ complexity for search, which is inefficient. To speed it up, we can use balanced search trees such as AVL Tree, Red-Black Tree, Splay Tree, etc., with an $O(\log{N})$ complexity for search, insertion and deletion.\par
+However, balanced search trees are complicated and difficult to implement. Fortunately, we have \textbf{Skip List}. Based on randomization, skip list supports both searching and insertion in $O(\log{N})$ expected time, but easier to implement. Skip List is widely used in databases such as \textit{Redis} and \textit{LevelDB}.
+\subsection{Problem Description}
+This project requires us to introduce the skip lists, and to implement insertion, deletion, and searching in skip lists. A formal proof is expected to show that the expected time for the skip list operations is $O(\log{N})$. We also generate test cases of different sizes to illustrate the time bound.

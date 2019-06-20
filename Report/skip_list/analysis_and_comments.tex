@@ -1,0 +1,141 @@
+\section{Analysis and Comments}
+Because skip list is based on a randomized algorithm, all the complexities analyzed below is the mathematical expectation. The worst-case complexity might be worse, but only with a very small probability.
+\subsection{Time Complexity}
+In this section, we will prove that the expectation of time complexity of search, insertion and deletion is $O(\log{N})$.
+\subsubsection{The expected $Max\_level$}
+Let $p$ denotes the probability of increasing the level in the random\_level algorithm \ref{alg:rand} (In our implementation, $p=\frac 1 2$). For an arbitary node, let $k$ denotes the level of it, then $P(k=i)=p^i(1-p)$(i.e. Geometric distribution). Then, the expected number of elements in the $k_{th}$ level (denoted $N_k$) is 
+\[
+    E(N_k) = \left\{
+        \begin{aligned}
+            &N,\ k=0\\
+            &N(1-\sum_{i=0}^{k-1}p^i(1-p))=N(1-\frac{(1-p)(1-p^k)}{1-p})=Np^k,\ k\geq 1
+        \end{aligned}
+    \right.
+\]
+To make the search efficient, we want the highest level $M-1$($M$ is the total number of levels) has an expected $O(1)=a$ number of elements, i.e.
+\begin{align*}
+    E(N_{M-1})=Np^{M-1}&=a\\
+    \log_p{N}+M-1&=\log_p{a}\ \text{(Logarithm on both sides)}\\
+    \therefore M=-O(\log_p{N})&=O(\log_\frac{1}{p}N)
+\end{align*}
+Therefore, the $Max\_level$ of the skip list can be set to $\log_\frac{1}{p}N$ to obtain maximum expected efficiency. In computer, the range of integer is $[0,2^{32})$, so $Max\_level$ is often set to be 32 in practical.
+\subsubsection{The expected search cost}
+We use a reverse analysis method to analyze the cost. Suppose we have found the node in the $k_{th}$ level, we analyze the search path backwards, going up and left to the head $H$.\par
+At an arbitary node $x$ in the $i_{th}$ level in the backward-path, there are 2 situations:
+\begin{enumerate}
+    \item The level of node $x$ is exactly $i$, then the next step is to go left.\label{enu:case1}
+    \item The level of node $x$ is larger than $i$, then the next step is to continue to climb up.\label{enu:case2}
+\end{enumerate}
+Let's take the case of finding 7 in section 2 as an example. The dashed arrows denote the path backwards. The red 6 and 4 nodes satisfy 2 situations above respectively:
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[shorten >=1pt,node distance=1.5cm,on grid,
+        place/.style={circle,draw=blue!50,fill=blue!20,text=white,minimum size=10mm},
+        sit/.style={circle,draw=red!50,fill=red!20,text=white,minimum size=10mm},
+        every state/.style={fill=none,draw=black,text=black,minimum size=10mm}]
+        
+        \node[place] (H1)  at (0,3) {$H$};
+        \node[place] (n11) at (6,3) {$4$};
+        \node[state] (n12) at (12,3) {$8$};
+        \node[state] (T1) at (13.5,3) {$T$};
+
+        \node[state] (H2)  at (0,1.5) {$H$};
+        \node[state] (n21) at (3,1.5) {$2$};
+        \node[sit] (n22) at (6,1.5) {$4$};
+        \node[sit] (n23) at (9,1.5) {$6$};
+        \node[state] (n24) at (12,1.5) {$8$};
+        \node[state] (T2) at (13.5,1.5) {$T$};
+
+        \node[state] (H3)  at (0,0) {$H$};
+        \node[state] (n31) at (1.5,0) {$1$};
+        \node[state] (n32) at (3,0) {$2$};
+        \node[state] (n33) at (4.5,0) {$3$};
+        \node[state] (n34) at (6,0) {$4$};
+        \node[state] (n35) at (7.5,0) {$5$};
+        \node[place] (n36) at (9,0) {$6$};
+        \node[place] (n37) at (10.5,0) {$7$};
+        \node[state] (n38) at (12,0) {$8$};
+        \node[state] (T3)  at (13.5,0) {$T$};
+
+        \path[->] 
+                  (H1)  edge [blue!50] node []{} (n11)
+                  (n11) edge [dashed, bend right] node []{} (H1)
+                  (n11) edge [] node []{} (n12)
+                  (n12) edge [] node []{} (T1)
+
+                  (H2)  edge [] node []{} (n21)
+                  (n21) edge [] node []{} (n22)
+                  (n22) edge [blue!50] node []{} (n23)
+                  (n23) edge [dashed, bend right] node []{} (n22)
+                  (n23) edge [] node []{} (n24)
+                  (n24) edge [] node []{} (T2)
+        
+                  (H3)  edge [] node []{} (n31)
+                  (n31) edge [] node []{} (n32)
+                  (n32) edge [] node []{} (n33)
+                  (n33) edge [] node []{} (n34)
+                  (n34) edge [] node []{} (n35)
+                  (n35) edge [] node []{} (n36)
+                  (n36) edge [blue!50] node []{} (n37)
+                  (n37) edge [dashed, bend right] node []{} (n36)
+                  (n37) edge [] node []{} (n38)
+                  (n38) edge [] node []{} (T3)
+                  
+                  (H1)  edge [] node []{} (H2)
+                  (H2)  edge [] node []{} (H3)
+                  
+                  (n21)  edge [] node []{} (n32)
+                  
+                  (n11)  edge [blue!50] node []{} (n22)
+                  (n22)  edge [dashed, bend right] node []{} (n11)
+                  (n22)  edge [] node []{} (n34)
+                  
+                  (n23)  edge [blue!50] node []{} (n36)
+                  (n36)  edge [dashed, bend right] node []{} (n23)
+
+                  (n12)  edge [] node []{} (n24)
+                  (n24)  edge [] node []{} (n38)
+                  
+                  (T1)  edge [] node []{} (T2)
+                  (T2)  edge [] node []{} (T3);
+    \end{tikzpicture}
+    \caption{The search path backwards from 7}\label{fig:back}
+\end{figure}
+The red node 6 is in level 1, equals to the maximum level of itself, so satisfies case \ref{enu:case1}; while the red node 4 is in level 1 but the maximum level of itself is 2, which satisfies \mbox{case \ref{enu:case2}.}\par
+Because the level follows geometric distribution, in an arbitary node $x$, it has a probability of $1-p$ to satisfy case \ref{enu:case1} while $p$ to satisfy case \ref{enu:case2}. Let $C(k)$ denotes the expected cost of search path that climbs up $k$ level, then
+\begin{align*}
+    C(0) &= 0\\
+    C(k) &= (1-p)(1+\text{cost in situation \ref{enu:case2}})+p(1+\text{cost in situation \ref{enu:case1}})\\
+    &= (1-p)(C(k)+1) + p(C(k-1)+1)\\
+    \therefore C(k) &= \frac{1}{p} + C(k-1)\\
+    \therefore C(k) &= \frac{k}{p}
+\end{align*}
+Because $k\leq Max\_level = O(\log_{\frac 1p}{N})$, thus $C(k)=O(\log{N})$. The time complexity of search is proportional to the cost of the search path, thus we finish the proof that the expected time of search is $O(\log{N})$.
+\subsubsection{The expected insertion/deletion cost}
+The insertion/deletion takes 2 steps:
+\begin{enumerate}
+    \item Find the predecessor
+    \item Insert/Delete
+\end{enumerate}
+Step 1 costs $O(\log{N})$ while step 2 costs $O(k)\leq Max\_level = O(\log{N})$ where $k$ is the level of the node to insert/delete, thus the expected time of insertion/deletion is also $O(\log{N})$.
+
+\subsection{Space complexity}
+The level $L$ follows geometric distribution, so the expectation of $L$ is
+\[
+    E(L) = \sum_{k=0}^\infty kp^k(1-p) = \frac{1}{1-p}
+\]
+For each node, it costs $O(L)$ space to store the successors array \texttt{next\_nodes}. Therefore, the space complexity of a skip list is $O(NL)=O(\frac{N}{1-p})=O(N)$. The smaller $p$ is, the less space the skip list costs.\par
+Here, we assume that the maximum level is infinity. If max level is finite (denoted $M$), we have
+\[
+    P(L=k)=\left\{
+        \begin{aligned}
+            &p^k(1-p),\ k<M-1\\
+            &1-\sum_{k=0}^{M-2}p^k(1-p)=p^{M-1},\ k=M-1
+        \end{aligned}
+        \right.
+\]
+When $M=O(\log{N})$ is large, $(M-1)p^{M-1}\to0$, the bias caused by assuming infinity level can be ignored. Thus, for skip list with finite level, the space complexity is still $O(N)$. 
+
+\subsection{Further thinking}
+As an emerging data structure, skip list exudes its unique brilliance with its high efficiency and simplicity. Compared to balanced search trees, skip list is not inferior to them.\par
+For a long time, in order to optimize the efficiency of searching, a lot of sophisticated tree structures are designed. Despite their efficiency, their large programming complexity is unacceptable. Skip list not only describes the structure itself, but also ``skips'' the stereotype of the ``tree'' structure. As a data structure, skip list has been widely used to describe an ordered set instead of using trees in more and more areas. As a way of thinking, ``skipping the stereotype'' leads mankind to making progress one after another!
