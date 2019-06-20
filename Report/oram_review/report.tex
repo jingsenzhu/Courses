@@ -1,0 +1,115 @@
+\documentclass[12pt,a4paper,titlepage]{article}
+
+\usepackage[top=0.8in, bottom=0.8in, left=0.2in, right=0.2in]{geometry}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage[AutoFakeBold=true]{xeCJK}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{indentfirst}
+\usepackage{enumitem} 
+\usepackage[hyperref]{ntheorem}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amssymb}
+\usepackage[toc,page]{appendix}
+\usepackage{multirow}
+\usepackage{cite}
+\usepackage{changepage}
+
+%\setmainfont{DejaVu Sans}
+\setCJKsansfont{等线}
+\setCJKmainfont{SimSun}
+\setmainfont{Times New Roman}
+\newfloat{figtab}{htb}{fgtb}
+\makeatletter
+    \newcommand\figcaption{\def\@captype{figure}\caption}
+    \newcommand\tabcaption{\def\@captype{table}\caption}
+\makeatother
+
+\bibliographystyle{ieeetr}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\setlength{\parindent}{2em}
+
+\lstset{
+	language=C++,
+	numbers=left,
+	breaklines=true,
+	basicstyle=\scriptsize,
+	commentstyle=\color{mygreen},
+	keywordstyle=\color{blue},
+	numberstyle=\color{mygray},
+	rulecolor=\color{black},
+	stringstyle=\color{mymauve}
+}
+
+\pagestyle{fancy}
+\lhead{\leftmark}
+\rhead{不经意随机访问机综述}
+\renewcommand{\headrulewidth}{0.5pt}
+
+
+\theoremstyle{plain}
+\theoremsymbol{\ensuremath{\clubsuit}}
+\theoremseparator{.}
+\theoremprework{\bigskip\hrule}
+\theorempostwork{\hrule\bigskip}
+\theoremindent1em
+\newtheorem{definition}{定义}[section]
+
+%\newtheorem{definition}{\hspace{2em}\textbf{定义}}[section]
+\newtheorem{theorem}{定理}[section]
+
+\title{
+	\includegraphics[scale=1.5]{zju_1.pdf}\\~\\
+	\includegraphics[scale=1]{zju_2.pdf}\\
+	~\\
+	\Huge{不经意随机访问机综述}\\[2ex]
+	\sffamily\large{面向信息技术的沟通技巧---作业3}
+}
+\author{
+	Zhu Jingsen\\
+	朱璟森\\
+	3170104166
+}
+
+\newcommand{\enabstractname}{Abstract}
+\newenvironment{enabstract}{%
+    \par
+    \noindent\mbox{}\hfill{\bfseries \enabstractname}\hfill\mbox{}\par\vskip 1ex\begin{adjustwidth}{2em}{2em}
+	}{\par\vskip 2.5ex\end{adjustwidth}}  
+
+\setlength{\parskip}{0.1em}
+\linespread{1.1}
+\setenumerate[1]{itemsep=0pt,partopsep=0pt,parsep=5pt,topsep=5pt}
+\setitemize[1]{itemsep=0pt,partopsep=0pt,parsep=5pt,topsep=5pt}
+\setdescription{itemsep=0pt,partopsep=0pt,parsep=5pt,topsep=5pt}
+	
+\begin{document}
+	\maketitle
+	\newpage
+	\tableofcontents
+	\newpage
+
+	\begin{enabstract}
+		\raggedright
+		With the development of cloud computing, more and more people and companies choose to store their data in cloud servers, which cause potential safety hazards. Despite the use of strong encryption schemes, adversaries can still learn valuable information regarding encrypted data by observing the data access patterns. In solution, one can hide the access patterns, which may leak sensitive information, using Oblivious RAMs (ORAMs). There are many implementations of ORAMs to hide the access patterns. A main issue remains to decrease the time and bandwidth costs. In this review, we list several implementations of ORAMs and summerize their performences.
+		\par
+		\textbf{Keywords:} Access pattern, ORAM, cloud computing
+	\end{enabstract}
+	\input{introduction}
+	\input{orams}
+	\input{summary}
+
+	\bibliography{oram}
+
+\end{document}
