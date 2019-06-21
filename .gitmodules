@@ -1,3 +1,6 @@
 [submodule "DBS/BPlusTree"]
 	path = DBS/BPlusTree
 	url = git://github.com/failure-P32/BPlusTree.git
+[submodule "DBS/Review-Notes"]
+	path = DBS/Review-Notes
+	url = https://github.com/failure-P32/DBS-review-notes.git
