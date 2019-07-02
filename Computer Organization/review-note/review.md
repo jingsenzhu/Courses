@@ -153,12 +153,12 @@
   * MemtoReg
   * Jump
 * CPU Performance
-  CPU Time = CPU clock cycles for a program $\times$ *Clock cycle time*
-  CPU Time = CPU clock cycles for a program / Clock Rate   (Clock Rate = 1 / Clock cycle time)
-  ***CPI*** (Clock cycles per instruction) = CPU clock cycles for a program / Instruction count
-  CPU Time = CPI $\times$ Instruction count $\times$ Clock cycle time
-  MIPS = Instruction count / (Execution time $\times$ 10$^6$) = Clock Rate / (CPI $\times$ 10$^6$)
-  MIPS: Million instruction per second
+  * CPU Time = CPU clock cycles for a program $\times$ *Clock cycle time*
+  * CPU Time = CPU clock cycles for a program / Clock Rate   (Clock Rate = 1 / Clock cycle time)
+  * ***CPI*** (Clock cycles per instruction) = CPU clock cycles for a program / Instruction count
+  * CPU Time = CPI $\times$ Instruction count $\times$ Clock cycle time
+  * MIPS = Instruction count / (Execution time $\times$ 10$^6$) = Clock Rate / (CPI $\times$ 10$^6$)
+    * MIPS: Million instruction per second
 
 #### MCPU
 
