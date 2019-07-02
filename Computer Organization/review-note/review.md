@@ -242,3 +242,65 @@
 
   ![1561380431301](assets/1561380431301.png)
 
+
+
+### Chapter 8: Storage, Networks and Other Peripherals
+
+* Three Characteristics
+  * Behavior
+  * Partner
+  * Data rate
+* organization of hard disk
+  * platters
+  * tracks
+  * sectors
+* Access time
+  * Seek
+  * Rotational latency = $\frac{0.5\text{ rotation}}{\text{RPM}/60}$
+  * Transfer
+* Dependability, Reliability, Availability
+  * MTTF    mean time to failure
+  * MTTR    mean time to repair
+  * MTBF (Mean Time Between Failures) = MTTF + MTTR
+  * Availability = MTTF / MTBF
+
+#### RAID
+
+* RAID 0: No redundancy
+* RAID 1: Disk Mirroring
+* RAID 3: Bit-Interleaved Parity Disk
+  * 偶校验: P = D1 $\oplus$ D2 $\oplus$ D3
+* RAID 4
+  * 每个块 (e.g. 512 bytes) 进行偶校验而不是每个bit
+  * Small Write Algorithm
+    * ![1561516598910](assets/1561516598910.png)
+* RAID 5
+  * 斜对角线
+
+#### Buses
+
+* 2 lines
+  * Control lines
+  * Data lines
+  * *Address lines* (may not exist)
+* Type of Buses
+  * processor-memory
+  * backplane
+  * I/O 
+* Synchronous bus : use a clock
+* Asynchronous bus : use *handshaking*
+* Handshaking protocol
+  * ReadReq
+  * DataRdy
+  * Ack: acknowledge
+  * ![1561517495920](assets/1561517495920.png)
+* Bus Standards
+  * SCSI
+  * PCI
+  * IPI
+  * ISA, EISA
+* Data Transfer Control Mode
+  * Polling
+  * Interrupt
+  * DMA (direct memory access)
+
