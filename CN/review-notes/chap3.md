@@ -34,6 +34,7 @@
   * Hamming distance of 2 (A and B): number of 1's in A xor B (i.e. number of different bits in A and B)
   * Hamming distance of a list: minimum 2 in the list
   * D(a,c) <= D(a,b) + D(b,c)
+  * 检测d比特错，需距离为d+1比特的编码
   * 纠正d比特错, 需距离为2d+1比特的编码
 * Error-detecting codes (CRC)
   * (r+1)-bits generator $G(x)$: degree r

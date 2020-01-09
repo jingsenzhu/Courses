@@ -78,6 +78,7 @@
 * IP Protocol
   * IP datagrams: Header+Text
   * Header (20+ byte)
+    ![image-20200109193515121](assets/image-20200109193515121.png)
     * Total length: <= 65535 bytes
     * DF: don't fragment, MF: more fragments
     * Fragment offset: 前面fragment长度除以8 (All fragments except the last one in a datagram must be a multiple of 8 bytes)
